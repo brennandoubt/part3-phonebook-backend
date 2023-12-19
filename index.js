@@ -3,12 +3,7 @@ const app = express()
 
 app.use(express.json())
 
-const generateId = () => {
-   const maxId = entries.length > 0
-      ? Math.max(...entries.map(e => e.id))
-      : 0
-   return maxId + 1
-}
+const generateId = () => Math.random() * (entries.length * 2)
 
 app.post('/api/persons', (request, response) => {
    const body = request.body
