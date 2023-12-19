@@ -3,7 +3,18 @@ const app = express()
 
 app.use(express.json())
 
-const entries = [
+app.post('/api/persons', (request, response) => {
+   const body = request.body
+
+})
+app.delete('/api/persons/:id', (request, response) => {
+   const id = Number(request.params.id)
+   entries = entries.filter(e => e.id !== id)
+
+   response.status(204).end()
+})
+
+let entries = [
    {
       "id": 1,
       "name": "Arto Hellas",
