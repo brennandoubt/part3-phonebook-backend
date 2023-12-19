@@ -3,10 +3,32 @@ const app = express()
 
 app.use(express.json())
 
+const generateId = () => {
+   const maxId = entries.length > 0
+      ? Math.max(...entries.map(e => e.id))
+      : 0
+   return maxId + 1
+}
+
 app.post('/api/persons', (request, response) => {
    const body = request.body
 
+   // posting entry has missing data (no name/number)
+   if (!(body.name || body.number)) {
+      return response.status(400).json({
+         error: `Content missing`
+      })
+   }
+   const entry = {
+      id: generateId(),
+      name: body.name,
+      number: body.number
+   }
+
+   entries = entries.concat(entry)
+   response.json(entry)
 })
+
 app.delete('/api/persons/:id', (request, response) => {
    const id = Number(request.params.id)
    entries = entries.filter(e => e.id !== id)
