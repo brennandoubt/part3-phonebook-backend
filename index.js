@@ -11,9 +11,24 @@ app.post('/api/persons', (request, response) => {
    // posting entry has missing data (no name/number)
    if (!(body.name || body.number)) {
       return response.status(400).json({
-         error: `Content missing`
+         error: `Name and number missing`
+      })
+   } else if (!body.name) {
+      return response.status(400).json({
+         error: `Name missing`
+      })
+   } else if (!body.number) {
+      return response.status(400).json({
+         error: `Number missing`
       })
    }
+   const isUniqueName = (entries.every(e => e.name !== body.name))
+   if (!isUniqueName) {
+      return response.status(400).json({
+         error: `Name already exists`
+      })
+   }
+
    const entry = {
       id: generateId(),
       name: body.name,

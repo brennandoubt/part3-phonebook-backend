@@ -5,3 +5,32 @@ Content-Type: application/json
    "name": "Brennan Allen",
    "number": "7773331111"
 }
+
+###
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+###
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+   "number": "2340985643"
+}
+
+###
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+   "name": "Brennan"
+}
+
+###
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+   "name": "Dan Abramov",
+   "number": "0843987621"
+}
