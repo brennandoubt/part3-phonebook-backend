@@ -16,41 +16,14 @@ const requestLogger = (request, response, next) => {
 //app.use(requestLogger) // take middleware into use
 
 let morgan = require('morgan')
-app.use(morgan('tiny'))
+//app.use(morgan('tiny')) // log messages to console
 
-app.post('/api/persons', (request, response) => {
-   const body = request.body
-
-   // posting entry has missing data (no name/number)
-   if (!(body.name || body.number)) {
-      return response.status(400).json({
-         error: `Name and number missing`
-      })
-   } else if (!body.name) {
-      return response.status(400).json({
-         error: `Name missing`
-      })
-   } else if (!body.number) {
-      return response.status(400).json({
-         error: `Number missing`
-      })
-   }
-   const isUniqueName = (entries.every(e => e.name !== body.name))
-   if (!isUniqueName) {
-      return response.status(400).json({
-         error: `Name already exists`
-      })
-   }
-
-   const entry = {
-      id: generateId(),
-      name: body.name,
-      number: body.number
-   }
-
-   entries = entries.concat(entry)
-   response.json(entry)
+// middleware to log http post request data
+morgan.token('postdata', (request, response) => {
+   if (request.method === 'POST') return JSON.stringify(request.body)
 })
+
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :postdata'))
 
 app.delete('/api/persons/:id', (request, response) => {
    const id = Number(request.params.id)
@@ -99,6 +72,40 @@ app.get('/api/persons/:id', (request, response) => {
    } else {
       response.status(404).end()
    }
+})
+
+app.post('/api/persons', (request, response) => {
+   const body = request.body
+
+   // posting entry has missing data (no name/number)
+   if (!(body.name || body.number)) {
+      return response.status(400).json({
+         error: `Name and number missing`
+      })
+   } else if (!body.name) {
+      return response.status(400).json({
+         error: `Name missing`
+      })
+   } else if (!body.number) {
+      return response.status(400).json({
+         error: `Number missing`
+      })
+   }
+   const isUniqueName = (entries.every(e => e.name !== body.name))
+   if (!isUniqueName) {
+      return response.status(400).json({
+         error: `Name already exists`
+      })
+   }
+
+   const entry = {
+      id: generateId(),
+      name: body.name,
+      number: body.number
+   }
+
+   entries = entries.concat(entry)
+   response.json(entry) // send json data back to browser
 })
 
 // middleware to catch requests made to non-existent routes
