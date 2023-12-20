@@ -11,9 +11,12 @@ const requestLogger = (request, response, next) => {
    console.log('Path:  ', request.path)
    console.log('Body:  ', request.body)
    console.log('---')
-   next()  // yield control to next middleware
+   //next()  // yield control to next middleware
 }
-app.use(requestLogger) // take middleware into use
+//app.use(requestLogger) // take middleware into use
+
+let morgan = require('morgan')
+app.use(morgan('tiny'))
 
 app.post('/api/persons', (request, response) => {
    const body = request.body
