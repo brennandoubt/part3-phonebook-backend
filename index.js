@@ -1,9 +1,19 @@
 const express = require('express')
 const app = express()
 
-app.use(express.json())
+app.use(express.json()) // json-parser (middleware)
 
 const generateId = () => Math.random() * (entries.length * 2)
+
+// Middleware: functions to handle request/response objects
+const requestLogger = (request, response, next) => {
+   console.log('Method:', request.method)
+   console.log('Path:  ', request.path)
+   console.log('Body:  ', request.body)
+   console.log('---')
+   next()  // yield control to next middleware
+}
+app.use(requestLogger) // take middleware into use
 
 app.post('/api/persons', (request, response) => {
    const body = request.body
@@ -87,6 +97,12 @@ app.get('/api/persons/:id', (request, response) => {
       response.status(404).end()
    }
 })
+
+// middleware to catch requests made to non-existent routes
+const unknownEndpoint = (request, response) => {
+   response.status(404).send({ error: 'unknown endpoint' })
+}
+app.use(unknownEndpoint)
 
 const PORT = 3001
 app.listen(PORT, () => {
