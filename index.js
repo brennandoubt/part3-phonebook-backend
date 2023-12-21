@@ -58,12 +58,18 @@ let entries = [
    }
 ]
 
+app.get('/', (request, response) => {
+   response.send(
+      `<h1>Hello phonebook!</h1>`
+   )
+})
+
 app.get('/api/persons', (request, response) => {
    response.json(entries)
 })
 app.get('/info', (request, response) => {
    response.send(
-      `<p>Phonebook has info for ${entries.length} people<p>${new Date()}`
+      `<p>Phonebook has info for ${entries.length} people</p>${new Date()}`
    )
 })
 app.get('/api/persons/:id', (request, response) => {
