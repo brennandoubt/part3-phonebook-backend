@@ -2,6 +2,9 @@ const express = require('express')
 const app = express()
 app.use(express.json()) // json-parser (middleware)
 
+// make express show static content fetched from http requests
+app.use(express.static('dist'))
+
 // enable cross-origin requests (middleware)
 const cors = require('cors')
 app.use(cors())
