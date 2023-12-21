@@ -1,9 +1,10 @@
 const express = require('express')
 const app = express()
-
 app.use(express.json()) // json-parser (middleware)
 
-const generateId = () => Math.random() * (entries.length * 2)
+// enable cross-origin requests (middleware)
+const cors = require('cors')
+app.use(cors())
 
 // Middleware: functions to handle request/response objects
 const requestLogger = (request, response, next) => {
@@ -24,6 +25,8 @@ morgan.token('postdata', (request, response) => {
 })
 
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :postdata'))
+
+const generateId = () => Math.random() * (entries.length * 2)
 
 app.delete('/api/persons/:id', (request, response) => {
    const id = Number(request.params.id)
@@ -114,7 +117,7 @@ const unknownEndpoint = (request, response) => {
 }
 app.use(unknownEndpoint)
 
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
    console.log(`Server running on port ${PORT}`)
 })
