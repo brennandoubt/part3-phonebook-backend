@@ -1,5 +1,9 @@
 const express = require('express')
 const app = express()
+require('dotenv').config()
+
+const Entry = require('./models/entry')
+
 app.use(express.json()) // json-parser (middleware)
 
 // make express show static content fetched from http requests
@@ -20,6 +24,7 @@ const requestLogger = (request, response, next) => {
 //app.use(requestLogger) // take middleware into use
 
 let morgan = require('morgan')
+const note = require('../fullstackopen2023/part3/models/note')
 //app.use(morgan('tiny')) // log messages to console
 
 // middleware to log http post request data
@@ -68,12 +73,17 @@ app.get('/', (request, response) => {
 })
 
 app.get('/api/persons', (request, response) => {
-   response.json(entries)
+   Entry.find({}).then(entries => {
+      console.log(entries)
+      response.json(entries)
+   })
 })
 app.get('/info', (request, response) => {
-   response.send(
-      `<p>Phonebook has info for ${entries.length} people</p>${new Date()}`
-   )
+   Entry.find({}).then(entries => {
+      response.send(
+         `<p>Phonebook has info for ${entries.length} people</p>${new Date()}`
+      )
+   })
 })
 app.get('/api/persons/:id', (request, response) => {
    const id = Number(request.params.id)
