@@ -36,6 +36,15 @@ Content-Type: application/json
 }
 
 ###
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+   "name": "Bo",
+   "number": "09"
+}
+
+###
 PUT http://localhost:3001/api/persons/6584eccb1339a24e598f0fb6
 Content-Type: application/json
 

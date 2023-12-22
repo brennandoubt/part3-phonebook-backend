@@ -116,15 +116,14 @@ app.post('/api/persons', (request, response, next) => {
 })
 
 app.put('/api/persons/:id', (request, response, next) => {
-   const body = request.body
+   const { name, number } = request.body
 
-   const entry = {
-      name: body.name,
-      number: body.number,
-   }
-
-   Entry.findByIdAndUpdate(request.params.id, entry, { new: true })
+   Entry.findByIdAndUpdate(
+      request.params.id,
+      { name, number },
+      { new: true, runValidators: true, context: 'query' }) // validate entries also when edited
       .then(updatedEntry => {
+         console.log(`Updated Entry: ${JSON.stringify(updatedEntry)}`)
          response.json(updatedEntry)
       })
       .catch(error => next(error))
