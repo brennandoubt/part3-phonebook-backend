@@ -86,14 +86,19 @@ app.get('/info', (request, response) => {
    })
 })
 app.get('/api/persons/:id', (request, response) => {
-   const id = Number(request.params.id)
-   const entry = entries.find(e => e.id === id)
+   // const id = Number(request.params.id)
+   // const entry = entries.find(e => e.id === id)
 
-   if (entry) {
+   // if (entry) {
+   //    response.json(entry)
+   // } else {
+   //    response.status(404).end()
+   // }
+
+   Entry.findById(request.params.id).then(entry => {
+      console.log(`response: ${entry}`)
       response.json(entry)
-   } else {
-      response.status(404).end()
-   }
+   })
 })
 
 app.post('/api/persons', (request, response) => {
@@ -113,21 +118,25 @@ app.post('/api/persons', (request, response) => {
          error: `Number missing`
       })
    }
-   const isUniqueName = (entries.every(e => e.name !== body.name))
-   if (!isUniqueName) {
+
+   const entry = new Entry({
+      name: body.name,
+      number: body.number
+   })
+
+   if (Entry.exists(entry)) {
+      console.log(`duplicate name found`)
       return response.status(400).json({
          error: `Name already exists`
       })
    }
 
-   const entry = {
-      id: generateId(),
-      name: body.name,
-      number: body.number
-   }
+   entry.save().then(savedEntry => {
+      response.json(savedEntry)
+   })
 
-   entries = entries.concat(entry)
-   response.json(entry) // send json data back to browser
+   // entries = entries.concat(entry)
+   // response.json(entry) // send json data back to browser
 })
 
 // middleware to catch requests made to non-existent routes
