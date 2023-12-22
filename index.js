@@ -24,6 +24,7 @@ const requestLogger = (request, response, next) => {
 //app.use(requestLogger) // take middleware into use
 
 let morgan = require('morgan')
+const note = require('../fullstackopen2023/part3/models/note')
 //app.use(morgan('tiny')) // log messages to console
 
 // middleware to log http post request data
@@ -139,6 +140,21 @@ app.post('/api/persons', (request, response, next) => {
       response.json(savedEntry)
    })
    .catch(error => next(error))
+})
+
+app.put('/api/persons/:id', (request, response, next) => {
+   const body = request.body
+
+   const entry = {
+      name: body.name,
+      number: body.number,
+   }
+
+   Entry.findByIdAndUpdate(request.params.id, entry, { new: true })
+      .then(updatedEntry => {
+         response.json(updatedEntry)
+      })
+      .catch(error => next(error))
 })
 
 // middleware to catch requests made to non-existent routes

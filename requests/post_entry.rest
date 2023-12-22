@@ -34,3 +34,12 @@ Content-Type: application/json
    "name": "Dan Abramov",
    "number": "0843987621"
 }
+
+###
+PUT http://localhost:3001/api/persons/6584eccb1339a24e598f0fb6
+Content-Type: application/json
+
+{
+   "name": "Brennan Allen",
+   "number": "2213447878"
+}
