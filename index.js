@@ -24,7 +24,6 @@ const requestLogger = (request, response, next) => {
 //app.use(requestLogger) // take middleware into use
 
 let morgan = require('morgan')
-const note = require('../fullstackopen2023/part3/models/note')
 //app.use(morgan('tiny')) // log messages to console
 
 // middleware to log http post request data
