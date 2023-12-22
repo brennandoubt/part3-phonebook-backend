@@ -35,14 +35,6 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :p
 
 const generateId = () => Math.random() * (entries.length * 2)
 
-app.delete('/api/persons/:id', (request, response, next) => {
-   Entry.findByIdAndDelete(request.params.id)
-      .then(result => {
-         response.status(204).end()
-      })
-      .catch(error => next(error))
-})
-
 let entries = [
    {
       "id": 1,
@@ -66,26 +58,37 @@ let entries = [
    }
 ]
 
-app.get('/', (request, response) => {
+app.delete('/api/persons/:id', (request, response, next) => {
+   Entry.findByIdAndDelete(request.params.id)
+      .then(result => {
+         response.status(204).end()
+      })
+      .catch(error => next(error))
+})
+
+app.get('/', (request, response, next) => {
    response.send(
       `<h1>Hello phonebook!</h1>`
    )
+   .catch(error => next(error))
 })
 
-app.get('/api/persons', (request, response) => {
+app.get('/api/persons', (request, response, next) => {
    Entry.find({}).then(entries => {
       console.log(entries)
       response.json(entries)
    })
+   .catch(error => next(error))
 })
-app.get('/info', (request, response) => {
+app.get('/info', (request, response, next) => {
    Entry.find({}).then(entries => {
       response.send(
          `<p>Phonebook has info for ${entries.length} people</p>${new Date()}`
       )
    })
+   .catch(error => next(error))
 })
-app.get('/api/persons/:id', (request, response) => {
+app.get('/api/persons/:id', (request, response, next) => {
    // const id = Number(request.params.id)
    // const entry = entries.find(e => e.id === id)
 
@@ -99,9 +102,10 @@ app.get('/api/persons/:id', (request, response) => {
       console.log(`response: ${entry}`)
       response.json(entry)
    })
+   .catch(error => next(error))
 })
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
    const body = request.body
 
    // posting entry has missing data (no name/number)
@@ -134,9 +138,7 @@ app.post('/api/persons', (request, response) => {
    entry.save().then(savedEntry => {
       response.json(savedEntry)
    })
-
-   // entries = entries.concat(entry)
-   // response.json(entry) // send json data back to browser
+   .catch(error => next(error))
 })
 
 // middleware to catch requests made to non-existent routes
