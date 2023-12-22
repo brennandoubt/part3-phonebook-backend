@@ -24,7 +24,6 @@ const requestLogger = (request, response, next) => {
 //app.use(requestLogger) // take middleware into use
 
 let morgan = require('morgan')
-const note = require('../fullstackopen2023/part3/models/note')
 //app.use(morgan('tiny')) // log messages to console
 
 // middleware to log http post request data
@@ -36,11 +35,12 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :p
 
 const generateId = () => Math.random() * (entries.length * 2)
 
-app.delete('/api/persons/:id', (request, response) => {
-   const id = Number(request.params.id)
-   entries = entries.filter(e => e.id !== id)
-
-   response.status(204).end()
+app.delete('/api/persons/:id', (request, response, next) => {
+   Entry.findByIdAndDelete(request.params.id)
+      .then(result => {
+         response.status(204).end()
+      })
+      .catch(error => next(error))
 })
 
 let entries = [
@@ -144,6 +144,15 @@ const unknownEndpoint = (request, response) => {
    response.status(404).send({ error: 'unknown endpoint' })
 }
 app.use(unknownEndpoint)
+
+const errorHandler = (error, request, response, next) => {
+   console.error(error.message)
+   if (error.name === 'CastError') {
+      return response.status(400).send({ error: 'malformatted id' })
+   }
+   next(error)
+}
+app.use(errorHandler)
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {

@@ -1,1 +1,10 @@
 DELETE http://localhost:3001/api/persons/4
+
+###
+DELETE http://localhost:3001/api/persons/6584eb5c1d685b560c65fe9b
+
+###
+DELETE http://localhost:3001/api/persons/6584eb7c1d685b560c65fe9e
+
+###
+DELETE http://localhost:3001/api/persons/6584ecca1339a24e598f0fb4
