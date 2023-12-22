@@ -24,7 +24,18 @@ const entrySchema = new mongoose.Schema({
       minLength: 3,
       required: true
    },
-   number: String
+   number: {
+      type: String,
+      minLength: 8,
+      validate: {
+         validator: (v) => {
+            // validate numbers with format: (dd|ddd)-d+
+            return /^\d{2,3}-\d+$/.test(v)
+         },
+         message: props => `${props.value} is not a valid phone number`
+      },
+      required: [true, 'Phone number must be added with user']
+   }
 })
 
 entrySchema.set('toJSON', {
