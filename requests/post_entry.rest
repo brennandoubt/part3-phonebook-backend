@@ -52,3 +52,12 @@ Content-Type: application/json
    "name": "Brennan Allen",
    "number": "10-233445-5"
 }
+
+###
+PUT http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+   "name": "Bono",
+   "number": "286-4337979"
+}
